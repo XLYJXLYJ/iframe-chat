@@ -1,62 +1,10 @@
 <template>
   <div class="ques-contain">
-    <h1 class="title">机器人答案</h1>
+    <h1 class="title">AI辅助</h1>
     <ul class="ques-ul">
-      <li>
-        <p class="q-title">你好</p>
-        <p class="q-answeer">您好，我是企保保险客服，很高兴为你服务！</p>
-        <!-- <p class="img-p" title="收起详情"><img src="../assets/img/s.png"></p> -->
-        <p class="img-p" title="展开详情"><img src="../assets/img/z.png"></p>
-      </li>
-      <li>
-        <p class="q-title">推荐</p>
-        <p class="q-answeer">请问，您需要哪类保险产品？健康险还是旅游意外险？请您留下联系方式，我们将安排保险专员为您服务。</p>
-        <!-- <p class="img-p" title="收起详情"><img src="../assets/img/s.png"></p> -->
-        <p class="img-p" title="展开详情"><img src="../assets/img/z.png"></p>
-      </li>
-      <li>
-        <p class="q-title">介绍疾病保险</p>
-        <p class="q-answeer">疾病保险的简介：指当被保险人患保单指定的重大疾病确诊后，保险公司按合同约定定额支付保险金的保险
-          疾病保险的简介：指当被保险人患保单指定的重大疾病确诊后，保险公司按合同约定定额支付保险金的保险
-          疾病保险的简介：指当被保险人患保单指定的重大疾病确诊后，保险公司按合同约定定额支付保险金的保险
-          疾病保险的简介：指当被保险人患保单指定的重大疾病确诊后，保险公司按合同约定定额支付保险金的保险
-          疾病保险的简介：指当被保险人患保单指定的重大疾病确诊后，保险公司按合同约定定额支付保险金的保险
-        </p>
-        <!-- <p class="img-p" title="收起详情"><img src="../assets/img/s.png"></p> -->
-        <p class="img-p" title="展开详情"><img src="../assets/img/z.png"></p>
-      </li>
-      <li>
-        <p class="q-title">你是</p>
-        <p class="q-answeer">你好！我是Aimi，欢迎咨询。</p>
-        <!-- <p class="img-p" title="收起详情"><img src="../assets/img/s.png"></p> -->
-        <p class="img-p" title="展开详情"><img src="../assets/img/z.png"></p>
-      </li>
-            <li>
-        <p class="q-title">你好</p>
-        <p class="q-answeer">您好，我是企保保险客服，很高兴为你服务！</p>
-        <!-- <p class="img-p" title="收起详情"><img src="../assets/img/s.png"></p> -->
-        <p class="img-p" title="展开详情"><img src="../assets/img/z.png"></p>
-      </li>
-      <li>
-        <p class="q-title">推荐</p>
-        <p class="q-answeer">请问，您需要哪类保险产品？健康险还是旅游意外险？请您留下联系方式，我们将安排保险专员为您服务。</p>
-        <!-- <p class="img-p" title="收起详情"><img src="../assets/img/s.png"></p> -->
-        <p class="img-p" title="展开详情"><img src="../assets/img/z.png"></p>
-      </li>
-      <li>
-        <p class="q-title">介绍疾病保险</p>
-        <p class="q-answeer">疾病保险的简介：指当被保险人患保单指定的重大疾病确诊后，保险公司按合同约定定额支付保险金的保险
-          疾病保险的简介：指当被保险人患保单指定的重大疾病确诊后，保险公司按合同约定定额支付保险金的保险
-          疾病保险的简介：指当被保险人患保单指定的重大疾病确诊后，保险公司按合同约定定额支付保险金的保险
-          疾病保险的简介：指当被保险人患保单指定的重大疾病确诊后，保险公司按合同约定定额支付保险金的保险
-          疾病保险的简介：指当被保险人患保单指定的重大疾病确诊后，保险公司按合同约定定额支付保险金的保险
-        </p>
-        <!-- <p class="img-p" title="收起详情"><img src="../assets/img/s.png"></p> -->
-        <p class="img-p" title="展开详情"><img src="../assets/img/z.png"></p>
-      </li>
-      <li>
-        <p class="q-title">你是</p>
-        <p class="q-answeer">你好！我是Aimi，欢迎咨询。</p>
+      <li class="ul-li" v-for="(item,index) in msg" :key="index">
+        <p class="q-title">客户意向：{{item.intent}}</p>
+        <span class="q-answeer">答案：</span><span class="q-answeer" v-html="item.robot_answer"></span>
         <!-- <p class="img-p" title="收起详情"><img src="../assets/img/s.png"></p> -->
         <p class="img-p" title="展开详情"><img src="../assets/img/z.png"></p>
       </li>
@@ -68,10 +16,28 @@
 
 export default {
   name: 'quesAns',
+  props:['msg'],
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      
     }
+  },
+  watch:{
+    msg:{
+      handler:function (val, oldVal) {
+        let this_ = this
+        this.msg = val
+        this.$nextTick(() => {
+          let length = val.length
+          let scrollTop = document.getElementsByClassName('ul-li')[length-1].offsetTop;
+          document.getElementsByClassName('ques-ul')[0].scrollTop = scrollTop
+          this_.msg = val
+        })
+      },
+      deep:true
+    },
+  },
+  mounted(){
   }
 }
 </script>
@@ -134,7 +100,7 @@ export default {
     }
     .ques-ul::-webkit-scrollbar {/*滚动条整体样式*/
       width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
-      height: 271px;
+      height: 1px;
     }
     .ques-ul::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
       border-radius: 10px;

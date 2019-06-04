@@ -1,28 +1,60 @@
 <template>
   <div class="hello">
     <div class="left">
-      <quesAns></quesAns>
+      <quesAns v-bind:msg="robotMsg"></quesAns>
     </div>
     <div class="right">
       <div class="right-top">
-        <labelPath></labelPath>
+        <labelPath v-bind:msg='robotMsgFlow'></labelPath>
       </div>
       <div class="right-bottom">
-        <flowPath></flowPath>
+        <flowPath v-bind:msg='robotMsgFlow'></flowPath>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import qs from 'qs'
 import labelPath from '@/components/LabelPath'
 import flowPath from '@/components/FlowPath'
 import quesAns from '@/components/QuesAns'
+import { setInterval } from 'timers';
 export default {
   name: 'Main',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      robotMsg: [],
+      intentArr:[],
+      robotMsgFlow:[]
+    }
+  },
+  mounted(){
+    // setInterval(() => {
+    //   this.getData()
+    // },2000)
+  },
+  methods:{
+    async getData(){
+      let data = {       
+        sentence:'hello',
+        dialogId:12345
+      }
+      var res = await this.axios.post('acs/v1.0/iframe_robot_answer',qs.stringify(data)).then((response) => {
+          console.log(response.data.status==200)
+          if(response.data.status==200){
+              this.robotMsg.push(response.data.data)
+              if(this.intentArr.indexOf(response.data.data.intent) == -1){
+                  this.intentArr.push(response.data.data.intent)
+                  this.robotMsgFlow.push(response.data.data)
+              }
+          }else{
+              this.$message({
+                type: 'error',
+                message: '出错了'
+              });
+          }
+      })
     }
   },
   components:{

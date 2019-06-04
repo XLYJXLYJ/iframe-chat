@@ -1,37 +1,10 @@
 <template>
   <div class="label-contain">
-      <h1>标签</h1>
+      <h1>进线意图</h1>
       <ul class="contain-ul">
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
-          <li>2222</li>
+           <li v-for="(item,index) in msg" :key="index">
+             {{item.line_intent}}
+           </li>
       </ul>
   </div>
 </template>
@@ -39,10 +12,26 @@
 <script>
 export default {
   name: 'labelPath',
+  props:['msg'],
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      
     }
+  },
+  watch:{
+    msg:{
+      handler:function (val, oldVal) {
+        let this_ = this
+        this.msg = val
+        this.$nextTick(() => {
+          this_.msg = val
+        })
+      },
+      deep:true
+    }
+  },
+  mounted(){
+    console.log(this.msg)
   }
 }
 </script>
@@ -81,6 +70,8 @@ export default {
     position: relative;
     top: 25%;
     li{
+      width: auto;
+      height: 22px;
       padding: 20px;
       padding-top: 10px;
       padding-bottom: 10px;
